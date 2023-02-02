@@ -83,31 +83,23 @@ class TmsRoute(models.Model):
             if not arrival['latitude'] and not arrival['longitude']:
                 raise exceptions.UserError(_(
                     "The arrival don't have coordinates."))
-            url = 'http://maps.googleapis.com/maps/api/distancematrix/json'
-            origins = (str(departure['latitude']) + ',' +
-                       str(departure['longitude']))
-            destinations = ''
-            places = [str(x.place_id.latitude) + ',' +
-                      str(x.place_id.longitude) for x in rec.route_place_ids
-                      if x.place_id.latitude and x.place_id.longitude]
-            for place in places:
-                origins += "|" + place
-                destinations += place + "|"
-            destinations += (str(arrival['latitude']) + ',' +
-                             str(arrival['longitude']))
+            url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
+            import sys
+            origins = (str(departure['latitude']) + ',' + str(departure['longitude']))
+            destinations = (str(arrival['latitude']) + ',' + str(arrival['longitude']))
             params = {
                 'origins': origins,
                 'destinations': destinations,
                 'mode': 'driving',
                 'language': self.env.lang,
-                'sensor': 'false',
+                'key': 'AIzaSyDotYCgWt4dfYvTFtQAeWoOTnL-rT4i298',
             }
             try:
-                result = json.loads(requests.get(url, params=params).content)
+                result = json.loads(requests.get(url, params).content)
                 distance = duration = 0.0
                 if result['status'] == 'OK':
                     if rec.route_place_ids or (rec.departure_id and
-                                               rec.arrival_id):
+                                                   rec.arrival_id):
                         pos = 0
                         for row in result['rows']:
                             distance += (
