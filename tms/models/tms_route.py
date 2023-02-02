@@ -92,7 +92,7 @@ class TmsRoute(models.Model):
                 'destinations': destinations,
                 'mode': 'driving',
                 'language': self.env.lang,
-                'key': 'AIzaSyDotYCgWt4dfYvTFtQAeWoOTnL-rT4i298',
+                'key': 'key',
             }
             try:
                 result = json.loads(requests.get(url, params).content)
