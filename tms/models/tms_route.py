@@ -87,12 +87,13 @@ class TmsRoute(models.Model):
             import sys
             origins = (str(departure['latitude']) + ',' + str(departure['longitude']))
             destinations = (str(arrival['latitude']) + ',' + str(arrival['longitude']))
+            key = self.env['ir.config_parameter'].get_param('mapquest.key')
             params = {
                 'origins': origins,
                 'destinations': destinations,
                 'mode': 'driving',
                 'language': self.env.lang,
-                'key': 'key',
+                'key': key,
             }
             try:
                 result = json.loads(requests.get(url, params).content)
